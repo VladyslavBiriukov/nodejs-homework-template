@@ -1,25 +1,30 @@
-const express = require('express')
+const express = require('express');
+// const Joi = require('joi');
 
-const router = express.Router()
+// const contacts = require('../../models/contacts');
+// const { HttpError } = require('../../helpers/');
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require('../../controllers/contacts');
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { validateBody } = require('../../middlewares');
+const schema = require('../../schemas/contactSchema');
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// const addSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().required(),
+// });                                   
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', ctrl.getAll);
 
-module.exports = router
+router.get('/:contactId', ctrl.getById);
+
+router.post('/', validateBody(schema.contactSchema), ctrl.addContact);
+
+router.put('/:contactId', validateBody(schema.contactSchema), ctrl.updateById);
+
+router.delete('/:contactId', ctrl.deleteById);
+
+module.exports = router;
