@@ -1,8 +1,11 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
+require('dotenv').config();  // берет данніе с енв и доб в const { DB_HOST } = process.env;
 
 const contactsRouter = require('./routes/api/contacts')  // импорт с api
+
+
 
 const app = express()
 
