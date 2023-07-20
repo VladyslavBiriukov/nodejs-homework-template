@@ -5,8 +5,6 @@ require('dotenv').config();  // берет данніе с енв и доб в c
 
 const contactsRouter = require('./routes/api/contacts')  // импорт с api
 
-
-
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
