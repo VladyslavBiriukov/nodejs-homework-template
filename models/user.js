@@ -28,11 +28,11 @@ const userSchema = new Schema({
     },
     token: {
         type: String,
-        default: null,
+        default: "",
     },
 }, { versionKey: false, timestamps: true });
 
-userSchema.post("save", handleMaongooseError); 
+userSchema.post("save", handleMaongooseError);  
 
 const User = model('user', userSchema);  // название колекциии
 
