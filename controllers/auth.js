@@ -1,11 +1,17 @@
-const { User } = require("../models/user");
+const { User } = require('../models/user');
 
 const bcrypt = require('bcryptjs');
-const JWT = require("jsonwebtoken");
+const JWT = require('jsonwebtoken');
+
+const gravatar = require('gravatar');  // временная ава
+const path = require("path");
+const fs = require("fs/promises");
+
+const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 
 const { SECRET_KEY } = process.env;
 
-const { HttpError, ctrlWrapper } = require('../helpers/');
+const { HttpError, ctrlWrapper } = require('../helpers/');  // try catch 
 
 const register = async (req, res) => { 
     const { email, password } = req.body;
@@ -16,10 +22,13 @@ const register = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);  // хешируем
 
+    const avatarURL = gravatar.url(email);
+
     const newUser = await User.create(
         {
             ...req.body,
-            password: hashPassword
+            password: hashPassword,
+            avatarURL
         });                                       // сохраняем ползывателя + хэшированый пароль 
 
     res.status(201).json({
@@ -27,6 +36,7 @@ const register = async (req, res) => {
         name: newUser.name,
     });
 };
+
 
 const login = async (req, res) => {
     const { email, password } = req.body;
@@ -73,11 +83,27 @@ const logout = async (req, res) => {
     });
 }
 
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+
+    const { path: tempUpload, originalname } = req.file; // берем временный путь  
+    const filename = `${_id}_${originalname}`; // делаем имя файла уникальным 
+    const resultUpload = path.join(avatarsDir, filename); // создаем где должен быть файл 
+    await fs.rename(tempUpload, resultUpload); // перемешаем из врем папки в паблик
+    const avatarURL = path.join('avatars', filename);  // записываем в базу
+    await User.findByIdAndUpdate(_id, { avatarURL }); // перезаписуем аватар 
+
+    res.json({
+        avatarURL,
+    });
+}
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
+    updateAvatar: ctrlWrapper(updateAvatar),
 }
 
 

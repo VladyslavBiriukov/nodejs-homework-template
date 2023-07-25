@@ -15,7 +15,7 @@ const authenticate = async (req, res, next) => {
     }
     try {
         const { id } = JWT.verify(token, SECRET_KEY);
-        const user = User.findById(id); // проверяем если ли человек в базе 
+        const user = await User.findById(id); // проверяем если ли человек в базе 
         if (!user || !user.token || user.token !== token) {
             next(HttpError(401, "User not found"));
         }
@@ -26,4 +26,4 @@ const authenticate = async (req, res, next) => {
     }
 }
 
-module.exports = { authenticate };
+module.exports = authenticate;
