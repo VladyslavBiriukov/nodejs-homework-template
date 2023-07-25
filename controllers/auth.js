@@ -6,6 +6,7 @@ const JWT = require('jsonwebtoken');
 const gravatar = require('gravatar');  // временная ава
 const path = require("path");
 const fs = require("fs/promises");
+const Jimp = require('jimp');
 
 const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 
@@ -87,6 +88,18 @@ const updateAvatar = async (req, res) => {
     const { _id } = req.user;
 
     const { path: tempUpload, originalname } = req.file; // берем временный путь  
+
+    await Jimp.read(tempUpload)
+    .then((avatar) => {
+      return avatar
+        .resize(250, 250) // resize
+        .quality(60) // set JPEG quality
+        .write(tempUpload); // save
+    })
+    .catch((err) => {
+      throw err;
+    });
+    
     const filename = `${_id}_${originalname}`; // делаем имя файла уникальным 
     const resultUpload = path.join(avatarsDir, filename); // создаем где должен быть файл 
     await fs.rename(tempUpload, resultUpload); // перемешаем из врем папки в паблик
