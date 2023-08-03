@@ -14,6 +14,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 app.use(logger(formatsLogger));  // прослойка для дебага 
 app.use(cors());                // позволяет запускать сервер на одном порте . кроссдоменные запросы
 app.use(express.json());       // заходит в хедер запроса и проверяет контент тип 
+app.use(express.static('public'));  // если приходит запрос за файлами возьми ее с папки которую укал в статик
 
 app.use('/api/contacts', contactsRouter); // пересматривает код в папки api.contacts  , api/contacts уже не нужен нужен только /
 app.use('/api/auth', authRouter);
