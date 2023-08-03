@@ -2,9 +2,9 @@ const { Schema, model } = require('mongoose');
 const Joi = require("joi");
 
 const { handleMaongooseError } = require('../helpers');
-const { subscriptionLevel } = require('../constants/user-constants');
+const { subscriptionLevel, emailRegexp } = require('../constants/user-constants.js');
 
-const emailRegexp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
 
 const userSchema = new Schema({
     name: {
