@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const Joi = require("joi");
 
-const { handleMaongooseError } = require('../helpers');
+const { handleMaongooseError, handleUpdateValidate } = require('../helpers');
 
 
 const contactSchema = new Schema({
@@ -26,7 +26,12 @@ const contactSchema = new Schema({
     }
 }, { versionKey: false, timestamps: true });
 
+
+
+contactSchema.pre("findOneAndUpdate", handleUpdateValidate);
+
 contactSchema.post("save", handleMaongooseError); // прослойка если будет ошибка сработает ,чинит 500 ошибку хоть она 400 
+contactSchema.post("findOneAndUpdate", handleMaongooseError)
 
 const addSchema = Joi.object({
 	name: Joi.string().required(),
@@ -35,7 +40,7 @@ const addSchema = Joi.object({
 	favorite: Joi.boolean(),
 });
 
-const updateFavoriteSchema = Joi.object({
+const updateFavoriteSchema = Joi.object({   // схема для id/favorite
 	favorite: Joi.boolean().required(),
 });
 

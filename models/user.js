@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const Joi = require("joi");
 
-const { handleMaongooseError } = require('../helpers');
+const { handleMaongooseError, handleUpdateValidate} = require('../helpers');
 const { subscriptionLevel, emailRegexp } = require('../constants/user-constants.js');
 
 
@@ -33,7 +33,12 @@ const userSchema = new Schema({
     },
 }, { versionKey: false, timestamps: true });
 
+
+
+userSchema.pre("findOneAndUpdate", handleUpdateValidate);
+
 userSchema.post("save", handleMaongooseError);  
+userSchema.post("findOneAndUpdate", handleMaongooseError);
 
 const User = model('user', userSchema);  // название колекциии
 

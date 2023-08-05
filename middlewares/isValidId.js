@@ -1,4 +1,4 @@
-const { isValidObjectId } = require("mongoose");
+const { isValidObjectId } = require("mongoose"); // проверяет id это может быть им или нет 
 
 const { HttpError } = require("../helpers");
 
