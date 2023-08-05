@@ -19,7 +19,7 @@ const authenticate = async (req, res, next) => {
         if (!user || !user.token || user.token !== token) {
             next(HttpError(401, "User not found"));
         }
-        req.user = user;
+        req.user = user;  // информация про того кто делает запрос
         next();
     } catch {
         next(HttpError(401));  // если приходет токен который не мы шифровали то он переходит в catch
