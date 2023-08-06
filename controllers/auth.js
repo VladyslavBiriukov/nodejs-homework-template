@@ -101,14 +101,19 @@ const updateAvatar = async (req, res) => {
     });
     
     const filename = `${_id}_${originalname}`; // делаем имя файла уникальным 
-    const resultUpload = path.join(avatarsDir, filename); // создаем где должен быть файл 
+    const resultUpload = path.join(avatarsDir, filename); // создаем где должен быть файл
     await fs.rename(tempUpload, resultUpload); // перемешаем из врем папки в паблик
     const avatarURL = path.join('avatars', filename);  // записываем в базу
-    await User.findByIdAndUpdate(_id, { avatarURL }); // перезаписуем аватар 
+    await User.findByIdAndUpdate(_id, { avatarURL }); // перезаписуем аватар
 
     res.json({
         avatarURL,
     });
+    
+    // const filedata = await cloudinary.uploader.upload(tempUpload, {
+    //     folder: "avatars"
+    // })
+    // console.log(filedata);
 }
 
 module.exports = {

@@ -22,6 +22,6 @@ router.post('/logout', authenticate, ctrl.logout);
 
 // avatar 
 
-router.patch('/avatars', authenticate, upload.single('avatar'), ctrl.updateAvatar);
+router.patch('/avatars', authenticate, upload.single('avatar'), ctrl.updateAvatar); // если много файло то array("названик", 8-кол фай) fields - файли в нескольких полях запроса
 
 module.exports = router;
