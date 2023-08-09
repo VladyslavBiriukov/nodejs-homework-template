@@ -7,8 +7,8 @@ const emailRegexp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
 const userSchema = new Schema({
     name: {
-      type: String,
-      required: true,
+        type: String,
+        required: true,
     },
     password: {
         type: String,
@@ -33,7 +33,15 @@ const userSchema = new Schema({
     avatarURL: {
         type: String,
         required: true,
-    }
+    },
+    verify: {
+        type: Boolean,
+        default: false,
+    },
+    verificationToken: {
+        type: String,
+        default: "",
+    },
 }, { versionKey: false, timestamps: true });
 
 userSchema.post("save", handleMaongooseError);  
@@ -51,9 +59,14 @@ const loginSchema = Joi.object({
     password: Joi.string().min(5).required(),
 });
 
+const emailVerifySchema = Joi.object({
+    email: Joi.string().pattern(emailRegexp).required(),
+})
+
 const schemas = {
     registerSchema,
     loginSchema,
+    emailVerifySchema
 };
 
 module.exports = {
