@@ -40,7 +40,7 @@ const register = async (req, res) => {
     const verifyEmail = {
         to: email,
         subject: "Verify Email",
-        html: `<a target="_blank" href="${BASE_URL || RENDER_URL}/api/auth/verify/${verificationToken}">Click to verify email</a>>`,
+        html: `<a target="_blank" href="${BASE_URL || RENDER_URL}/api/auth/verify/${verificationToken}">Click to verify email</a>`,
     };
 
     await sendEmail(verifyEmail);
@@ -48,6 +48,7 @@ const register = async (req, res) => {
     res.status(201).json({
         email: newUser.email,
         name: newUser.name,
+        subscription: newUser.subscription,
     });
 };
 
@@ -58,7 +59,10 @@ const verifyEmail = async (req, res) => {
     if (!user) {
         throw HttpError(401, "Email not found");
     }
-    await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: "" }); // обновляю базу если есть 
+    await User.findByIdAndUpdate(user._id, {
+        verify: true,
+        verificationToken: "",
+    }); // обновляю базу если есть 
     
     res.json({
         message: "Email verify Success"
