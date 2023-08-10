@@ -13,7 +13,7 @@ router.post('/register', validateBody(schemas.registerSchema), ctrl.register);
 
 router.get('/verify/:verificationToken', ctrl.verifyEmail);
 
-router.post('/verify', validateBody(schemas.emailVerifySchema), ctrl.resendVerifyEmail)
+router.post('/verify', validateBody(schemas.emailVerifySchema), ctrl.resendVerifyEmail) // повторно отправить письмо на почту
 
 // signIn
 router.post('/login', validateBody(schemas.loginSchema), ctrl.login);
