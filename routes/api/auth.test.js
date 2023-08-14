@@ -5,7 +5,7 @@ const request = require('supertest');  // http запрос на backend
 
 const app = require('../../app');
 
-const User = require('../../models/user');
+const { User } = require('../../models/user');
 
 
 const { DB_HOST_TEST, PORT } = process.env;
@@ -29,7 +29,7 @@ describe('test signUp route', () => {
     test('test signUp with correct data', async () => {
         const signUpData = {
             name: "TEST",
-            email: "cikarep898@viperace.com",
+            email: "test@gmail.com",
             password: "123456Aa"
         }
         const { statusCode, body } = await request(app).post("/api/auth/register").send(signUpData);
